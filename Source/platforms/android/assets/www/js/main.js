@@ -147,8 +147,8 @@ var PlayState = {
 
     },
     create: function() {
-        this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.game.physics.arcade.gravity.y = 1200;  
+        this.game.physics.startSystem(Phaser.Physics.P2JS);
+        this.game.physics.p2.gravity.y = 1200;  
         
         // Add sprite and tile
         this.background = this.game.add.tileSprite(0, 0, screenW, screenH, 'background');
@@ -157,7 +157,31 @@ var PlayState = {
         this.ground = new Ground(this.game, 0, backgroundH, screenW, screenH - backgroundH);
         this.game.add.existing(this.ground);
  
-        
+        var length = 40;
+        var height = 8;  //height for the physics bod - your image height is 8px
+        var width = 20;   //this is the witdh for the physics body.. if to small the rectangles will get scrambled together
+        var maxForce =20000;  //the force that holds the rectangles together
+        var xAnchor =200;  //position of the first rectangle that acts as anchor
+        var lastRect;
+
+        for(var i=0; i<=length; i++){
+            var x = xAnchor;                 // all rects are on the same x position
+            var y = i*height;               // every new rects is positioned below the last
+            newRect = this.game.add.sprite(x, y, 'rope');    //add sprite
+            this.game.physics.p2.enable(newRect, false);      // enable physicsbody
+            newRect.body.setRectangle(width,height);    //set custom rectangle
+            if (i==0){newRect.body.static=true;}  //anchor the first one created
+            else{  
+                newRect.body.velocity.x =100;   //give it a push :)
+                newRect.body.mass =  length/i;  // reduce mass for evey rope element
+            }     
+            //after the first rectangle is created we can add the constraint
+            if(lastRect){
+                this.game.physics.p2.createDistanceConstraint(newRect,lastRect,height,maxForce);
+            } 
+            lastRect = newRect;
+        }; 
+ 
         // Add key handleEvent
 
         // Mouse click / touch
@@ -185,16 +209,16 @@ var PlayState = {
     },
     update: function() {
         if (!this.gameOver){
-            this.boxes.forEach(function(box) {
-                this.game.physics.arcade.collide(box, this.ground, this.boxImpactHandler, null, this);
+            // this.boxes.forEach(function(box) {
+                // this.game.physics.p2.collide(box, this.ground, this.boxImpactHandler, null, this);
                 
-                this.boxes.forEach(function(box1) {
-                    if (box != box1)
-                    {
-                        this.game.physics.arcade.collide(box1, box, this.boxImpactHandler, null, this);
-                    }
-                }, this);
-            }, this);
+                // this.boxes.forEach(function(box1) {
+                    // if (box != box1)
+                    // {
+                        // this.game.physics.p2.collide(box1, box, this.boxImpactHandler, null, this);
+                    // }
+                // }, this);
+            // }, this);
         }
     },
     boxImpactHandler: function(enemy, box) {

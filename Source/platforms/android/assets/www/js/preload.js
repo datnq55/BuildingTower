@@ -14,10 +14,11 @@ var PreloadState = {
         this.load.image('getReady', 'assets/get-ready.png');
         
         this.load.image('scoreboard', 'assets/scoreboard.png');
-        this.load.spritesheet('medals', 'assets/medals.png',44, 46, 2);
         this.load.image('gameover', 'assets/gameover.png');
         this.load.image('particle', 'assets/particle.png');
+        this.load.image('rope', 'assets/rope-small.png');
         this.load.spritesheet('box', 'assets/brick.png', 40, 40, 1);
+        this.load.spritesheet('medals', 'assets/medals.png',44, 46, 2);
         
         this.load.bitmapFont('flappyfont', 'assets/fonts/flappyfont.png', 'assets/fonts/flappyfont.fnt');
         

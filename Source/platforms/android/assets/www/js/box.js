@@ -3,7 +3,7 @@ var Box = function(game, x, y, frame) {
     Phaser.Sprite.call(this, game, x, y, 'box', frame);
     
     this.anchor.setTo(0.5, 0.5);
-    this.game.physics.arcade.enableBody(this);
+    this.game.physics.p2.enableBody(this);
     this.body.allowGravity = true;
     this.body.immovable = false;
 };
